@@ -47,6 +47,12 @@
         background: linear-gradient(90deg, rgba(224,68,255,1) 23%, rgba(0,0,0,1) 100%);
 
     }
+    #up{
+      background: linear-gradient(90deg, rgba(224,68,255,1) 23%, rgba(0,0,0,1) 100%);
+    }
+    #calc{
+      background: linear-gradient(90deg, rgba(250,255,68,1) 50%, rgba(0,255,4,1) 100%);
+    }
 
 </style>
 
@@ -55,13 +61,88 @@
     <!--Navbar-->
     <nav id="nav" class="navbar">
         <div class="container-fluid">
-          <a class="navbar-brand"><i class="fa-solid fa-calculator fa-bounce"></i> Budget Calculator</a>
+          <a class="navbar-brand"><i class="fa-solid fa-calculator fa-fade"></i> Budget Calculator</a>
           <form class="d-flex" role="search">
             <button type="button" class="btn btn-info" onclick="logout()"><i class="fa-solid fa-right-from-bracket fa-fade"></i> Log Out</button>
           </form>
         </div>
       </nav>
 
+      <!--Form-->
+      <section>
+       
+        <div id="calc" class="container mt-5 mb-5">
+          <form>
+
+            <div class="row">
+              <!-- Income Column -->
+              <div class="col-md-6 mb-5 mt-4">
+                <!-- Dropdown Menu -->
+                <div class="mb-3">
+                  <label for="dropdown1" class="form-label">Income</label>
+                  <select id="dropdown1" class="form-select">
+                    <option selected>Salary</option>
+                    <option value="1">Side Business</option>
+                  </select>
+                </div>
+        
+                <!-- Input Field -->
+                <div class="mb-3">
+                  <input type="number" class="form-control" id="input1" placeholder="Enter Amount">
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">Add Income</button>
+
+              </div>
+        
+              <!-- Expenses Column -->
+              <div class="col-md-6 mb-5 mt-4 ">
+                <!-- Dropdown Menu -->
+                <div class="mb-3">
+                  <label for="dropdown2" class="form-label">Select Expense type</label>
+                  <select id="dropdown2" class="form-select">
+                    <option selected>Emi</option>
+                    <option value="1">Fuel</option>
+                    <option value="2">Insurance</option>
+                    <option value="3">Food</option>
+                    <option value="4">Travel</option>
+                    <option value="3">Miscellaneous</option>
+                  </select>
+                </div>
+        
+                <!-- Input Field -->
+                <div class="mb-3">
+                  <input type="Number" class="form-control" id="input2" placeholder="Enter Amount">
+                </div>
+                <button type="submit" class="btn btn-warning w-100">Add Expense</button>
+              </div>
+
+              <div class="container mb-5">
+                <div class="row text-center" style="justify-content: center;">
+                  <div class="col-lg-3 col-md-2"></div>
+                  <div id="balance" class="col-lg-3 col-md-4 col-sm-4 col-5 mt-5">
+                    <h4>TOTAL BALANCE</h4>
+                    <hr />
+                    <p id="total_balance"></p>
+                  </div>
+        
+                  <div id="expense" class="col-lg-3 col-md-4 col-sm-4 col-5 mt-5">
+                    <h4>TOTAL EXPENSE</h4>
+                    <hr />
+                    <p id="total_expense"></p>
+                  </div>
+                  <div class="col-lg-3 col-md-2"></div>
+                </div>
+              </div>
+
+            </div>
+
+        
+          </form>
+        </div>
+
+
+      </section>
 
       <!--Footer-->
       <footer class="text-center text-lg-start">

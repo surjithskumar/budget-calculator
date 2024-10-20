@@ -53,22 +53,59 @@
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div id="table" class="col-lg-6 col-md-8 col-sm-10  text-center p-4">
-                <div class="mb-3">
-                    <input type="text" placeholder="Username" class="form-control text-center" id="exampleInputPassword1">
-                  </div>
-                <div class="mb-3">
-                  <input type="email" class="form-control text-center" placeholder="Enter Your Email Address"  id="exampleInputEmail1" aria-describedby="emailHelp">
-                </div>
-                <div class="mb-3">
-                  <input type="password" placeholder="Enter Your Password" class="form-control text-center" id="exampleInputPassword1">
-                </div>
-                <div class="text-center text-white mt-3">
-                    <p>Already have an account?<a href="./login.html" class="text-decoration-none text-info"> Login</a></p>
-                </div>
-                <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check fa-fade" style="color: #ffffff;"></i> Register</button>
+                <h3 class="text-center text-white">Register Your Account !</h3>
+                <form id="registerForm">
+                    <div class="mb-3">
+                        <input type="text" placeholder="Username" class="form-control text-center" id="username" required>
+                      </div>
+                    <div class="mb-3">
+                      <input type="email" class="form-control text-center" placeholder="Enter Your Email Address"  id="email" aria-describedby="emailHelp" required>
+                    </div>
+                    <div class="mb-3">
+                      <input type="password" placeholder="Enter Your Password" class="form-control text-center" id="password" required>
+                    </div>
+                    <div class="text-center text-white mt-3">
+                        <p>Already have an account?<a href="./login.html" class="text-decoration-none text-info"> Login</a></p>
+                    </div>
+                    <button onclick="register()" type="submit" class="btn btn-primary"><i class="fa-solid fa-check fa-fade" style="color: #ffffff;"></i> Register</button>
+                </form>
             </div>
         </div>
     </div>
 
 </body>
+
+<script>
+    function register(event){
+        event.preventDefault(); // Prevent the form from submitting
+
+        let accDetails = {
+            username:document.getElementById('username').value,
+            email:document.getElementById('email').value,
+            password:document.getElementById('password').value
+        };
+
+    //check working
+    console.log(accDetails);
+
+    //check if account number is already exist in local storage 
+    if (localStorage.getItem(accDetails.email)){
+        alert("Sorry, this account is already exists");
+
+        //clear input field addded optional
+        document.getElementById('username').value="";
+        document.getElementById('email').value="";
+        document.getElementById('password').value="";
+    }
+    else{
+        localStorage.setItem(accDetails.email, JSON.stringify    (accDetails));
+        alert("Welcome to Budget Calculator");
+        window.location='./login.html'
+    }
+    }
+    //Attach register function to the form submission
+    document.getElementById('registerForm').addEventListener("submit",register);
+
+</script>
+
 </html>
