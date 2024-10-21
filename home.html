@@ -61,7 +61,7 @@
     <!--Navbar-->
     <nav id="nav" class="navbar">
         <div class="container-fluid">
-          <a class="navbar-brand"><i class="fa-solid fa-calculator fa-fade"></i> Budget Calculator</a>
+          <a id="name" class="navbar-brand"><i class="fa-solid fa-calculator fa-fade"></i></a>
           <form class="d-flex" role="search">
             <button type="button" class="btn btn-info" onclick="logout()"><i class="fa-solid fa-right-from-bracket fa-fade"></i> Log Out</button>
           </form>
@@ -88,10 +88,10 @@
         
                 <!-- Input Field -->
                 <div class="mb-3">
-                  <input type="number" class="form-control" id="input1" placeholder="Enter Amount">
+                  <input type="number" class="form-control" id="addincome" placeholder="Enter Amount">
                 </div>
 
-                <button type="submit" class="btn btn-success w-100">Add Income</button>
+                <button type="submit" onclick="addIncome()" class="btn btn-success w-100">Add Income</button>
 
               </div>
         
@@ -112,9 +112,9 @@
         
                 <!-- Input Field -->
                 <div class="mb-3">
-                  <input type="Number" class="form-control" id="input2" placeholder="Enter Amount">
+                  <input type="Number" class="form-control" id="addexpense" placeholder="Enter Amount">
                 </div>
-                <button type="submit" class="btn btn-warning w-100">Add Expense</button>
+                <button type="submit" onclick="addExpense()" class="btn btn-warning w-100">Add Expense</button>
               </div>
 
               <div class="container mb-5">
@@ -136,6 +136,33 @@
               </div>
 
             </div>
+
+            <div class="container" id="details">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                  <h2 class="text text-center">YOUR EXPENSES</h2>
+                  <hr>
+                  <table class="table-warning bg-white text-center w-100">
+                    <thead>
+                      <tr class="table-warning">
+                        <th scope="col">Type</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Balance</th>
+                        <th scope="col">Date & Time</th>
+                      </tr>
+                    </thead>
+                    <tbody id="expense_table"></tbody>
+                  </table>
+                </div>
+
+
+            </div>
+
+            <div class="clear text-center">
+              <button class="btn btn-info p-2 m-5" type="submit" onclick="clearall()">Clear All <i class="fa-solid fa-eraser"></i></button>
+            </div>
+
+      
+          </div>
 
         
           </form>
@@ -166,6 +193,99 @@ function logout(){
     }
 }
 
+let key = localStorage.getItem("username");
+console.log(key);
+let user_data = JSON.parse(localStorage.getItem(key)) || {
+income: 0,
+expense: 0,
+}; // Default values if not set
+console.log(user_data);
+
+
+function addIncome() {
+   let incometype = document.getElementById("addincometype").value;
+   let incomeAmount = parseFloat(document.getElementById("addincome").value);
+
+   if (incometype === "" || isNaN(incomeAmount) || incomeAmount <= 0) {
+      alert("Please fill all the details correctly");
+   } else {
+      let currentDateTime = new Date().toLocaleString();
+
+      user_data.balance = (parseFloat(user_data.balance) || 0) + incomeAmount;
+      user_data.income = user_data.income || [];
+      user_data.income.push({
+         type: incometype,
+         amount: incomeAmount,
+         balance: user_data.balance,
+         dt: currentDateTime,
+      });
+
+      localStorage.setItem(key, JSON.stringify(user_data));
+
+      document.getElementById("total_balance").textContent = `RS ${user_data.balance}/-`;
+      alert("added income successfully")
+    }
+}
+
+
+
+function addExpense() {
+   let expenseAmount = parseFloat(
+   document.getElementById("addexpense").value);
+   let expensetype = document.getElementById("addexpensetype").value;
+   
+   if (expensetype == "" || isNaN(expenseAmount)) {
+      alert("please fill all the fields");
+   } else if (user_data.balance < expenseAmount) {
+      alert("insufficient balance");
+   } else {
+      let currentDateTime = new Date().toLocaleString();
+      user_data.totalexpense = (parseFloat(user_data.totalexpense) || 0) + expenseAmount;
+      user_data.balance = parseFloat(user_data.balance) - expenseAmount;
+
+      user_data.expense = user_data.expense || [];
+      user_data.expense.push({
+        type: expensetype,
+        amount: expenseAmount,
+        balance: user_data.balance,
+        dt: currentDateTime,
+      });
+
+      document.getElementById("total_balance").textContent = `RS ${user_data.balance}/-`;
+      localStorage.setItem(key, JSON.stringify(user_data));
+      document.getElementById("total_expense").textContent = `Rs ${user_data.totalexpense}/-`;
+      alert("added expense successfully")
+   }
+}
+
+let expenserows = user_data.expense.map((a) => `
+    <tr>
+        <td>${a.type}</td>
+        <td><span style="color:red;padding-left:40px;font-weight:900">-</span>${a.amount}</td>
+        <td><span style="padding-left:30px;">${a.balance}</span></td>
+        <td><span style="font-size:14px;font-weight:900">${a.dt}</span></td>
+    </tr>
+`).join(""); // Join the array into a single string
+expense_table.innerHTML = expenserows;
+
+
+function clearall() {
+  if (confirm("Are you sure you want to clear your data?")) {
+
+    user_data.balance = 0;
+    user_data.totalexpense = 0;
+    user_data.expense = [];
+    user_data.income = [];
+  
+    localStorage.setItem(key, JSON.stringify(user_data));
+
+    document.getElementById("total_balance").textContent = `RS 0/-`;
+    document.getElementById("total_expense").textContent = `Rs 0/-`;
+    income_table.innerHTML = ""; 
+    expense_table.innerHTML = ""; 
+  }
+  alert("cleared data successfully")
+}
 
 </script>
 
