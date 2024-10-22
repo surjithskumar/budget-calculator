@@ -61,7 +61,7 @@
     <!--Navbar-->
     <nav id="nav" class="navbar">
         <div class="container-fluid">
-          <a id="name" class="navbar-brand"><i class="fa-solid fa-calculator fa-fade"></i></a>
+          <a id="name" class="navbar-brand"><i class="fa-solid fa-calculator fa-fade"></i> Budget Calculator</a>
           <form class="d-flex" role="search">
             <button type="button" class="btn btn-info" onclick="logout()"><i class="fa-solid fa-right-from-bracket fa-fade"></i> Log Out</button>
           </form>
@@ -79,16 +79,11 @@
               <div class="col-md-6 mb-5 mt-4">
                 <!-- Dropdown Menu -->
                 <div class="mb-3">
-                  <label for="dropdown1" class="form-label">Income</label>
-                  <select id="dropdown1" class="form-select">
-                    <option selected>Salary</option>
-                    <option value="1">Side Business</option>
-                  </select>
                 </div>
         
                 <!-- Input Field -->
                 <div class="mb-3">
-                  <input type="number" class="form-control" id="addincome" placeholder="Enter Amount">
+                  <input type="number" class="form-control" id="addincome" placeholder="Enter Your Income">
                 </div>
 
                 <button type="submit" onclick="addIncome()" class="btn btn-success w-100">Add Income</button>
@@ -102,11 +97,15 @@
                   <label for="dropdown2" class="form-label">Select Expense type</label>
                   <select id="dropdown2" class="form-select">
                     <option selected>Emi</option>
-                    <option value="1">Fuel</option>
-                    <option value="2">Insurance</option>
-                    <option value="3">Food</option>
-                    <option value="4">Travel</option>
-                    <option value="3">Miscellaneous</option>
+                    <option value="Fuel">Fuel</option>
+                    <option value="Insurance">Insurance</option>
+                    <option value="Food">Food</option>
+                    <option value="Travel">Travel</option>
+                    <option value="Miscellaneous">Miscellaneous</option>
+                    <option value="Rent">Rent</option>
+                    <option value="Events">Events</option>
+                    <option value="Shopping">Shopping</option>
+                    <option value="Recharge">Recharge</option>
                   </select>
                 </div>
         
@@ -198,15 +197,19 @@ console.log(key);
 let user_data = JSON.parse(localStorage.getItem(key)) || {
 income: 0,
 expense: 0,
+balance: 0, // Ensure this is initialized
+totalexpense: 0 // Ensure this is initialized
 }; // Default values if not set
 console.log(user_data);
 
+document.getElementById("total_balance").textContent = `RS ${user_data.balance}/-`;
+document.getElementById("total_expense").textContent = `Rs ${user_data.totalexpense}/-`;
+
 
 function addIncome() {
-   let incometype = document.getElementById("addincometype").value;
    let incomeAmount = parseFloat(document.getElementById("addincome").value);
 
-   if (incometype === "" || isNaN(incomeAmount) || incomeAmount <= 0) {
+   if (isNaN(incomeAmount) || incomeAmount <= 0) {
       alert("Please fill all the details correctly");
    } else {
       let currentDateTime = new Date().toLocaleString();
@@ -214,7 +217,6 @@ function addIncome() {
       user_data.balance = (parseFloat(user_data.balance) || 0) + incomeAmount;
       user_data.income = user_data.income || [];
       user_data.income.push({
-         type: incometype,
          amount: incomeAmount,
          balance: user_data.balance,
          dt: currentDateTime,
@@ -232,7 +234,7 @@ function addIncome() {
 function addExpense() {
    let expenseAmount = parseFloat(
    document.getElementById("addexpense").value);
-   let expensetype = document.getElementById("addexpensetype").value;
+   let expensetype = document.getElementById("dropdown2").value;
    
    if (expensetype == "" || isNaN(expenseAmount)) {
       alert("please fill all the fields");
